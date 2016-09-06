@@ -63,7 +63,11 @@ class Logger
             stream = stdout;
         }
         else {
-            stream = fopen(name,"w");
+            #ifdef _MSC_VER
+                fopen_s(&stream, name, "w");
+            #else
+                stream = fopen(name, "w");
+            #endif
             if (stream == NULL) {
                 stream = stdout;
             }

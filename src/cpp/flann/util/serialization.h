@@ -481,7 +481,11 @@ class SaveArchive : public OutputArchive<SaveArchive>
 public:
     SaveArchive(const char* filename)
     {
-        stream_ = fopen(filename, "wb");
+        #ifdef _MSC_VER
+            fopen_s(&stream_, filename, "wb");
+        #else
+            stream_ = fopen(filename, "wb");
+        #endif
         own_stream_ = true;
         initBlock();
     }
@@ -748,9 +752,12 @@ public:
     LoadArchive(const char* filename)
     {
         // Open the file
-        stream_ = fopen(filename, "rb");
+        #ifdef _MSC_VER
+            fopen_s(&stream_, filename, "rb");
+        #else
+            stream_ = fopen(filename, "rb");
+        #endif
         own_stream_ = true;
-
         initBlock(stream_);
     }
 
